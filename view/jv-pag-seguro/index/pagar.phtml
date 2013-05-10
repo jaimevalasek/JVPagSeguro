@@ -1,0 +1,50 @@
+<h2>Itens</h2>
+
+<form target="pagseguro" method="post" action="https://pagseguro.uol.com.br/v2/checkout/payment.html">
+	<input type="hidden" name="receiverEmail" value="suporte@lojamodelo.com.br">  
+	<input type="hidden" name="currency" value="BRL">  
+	    
+	<?php foreach ($itens as $key => $item):?>
+	<input type="hidden" name="itemId<?php echo $key?>" value="<?php echo $item['itemId' . $key]?>">
+	<input type="hidden" name="itemDescription<?php echo $key?>" value="<?php echo $item['itemDescription' . $key]?>">
+	<input type="hidden" name="itemAmount<?php echo $key?>" value="<?php echo $item['itemAmount' . $key]?>">
+	<input type="hidden" name="itemQuantity<?php echo $key?>" value="<?php echo $item['itemQuantity' . $key]?>">
+	<input type="hidden" name="itemWeight<?php echo $key?>" value="<?php echo $item['itemWeight' . $key]?>">
+	<?php endforeach;?>
+	
+	<!-- 
+	 - Código de referência do pagamento no seu sistema (opcional)
+	 - Pode ser usado para identificar a loja para usar o mesmo login para sites diferentes.
+	 - Exemplos:
+	 	- www.zf2.com.br = REF# ZF2
+	 	- www.jquery2.com.br = REF# JQUERY2
+	-->  
+    <input type="hidden" name="reference" value="CVA">
+	
+	<!-- 
+		Informações de frete (opcionais)
+		 - Usar somente em caso de envio por frete transportadora ou correios. 
+	-->
+	<input type="hidden" name="shippingType" value="1">
+	<input type="hidden" name="shippingAddressPostalCode" value="<?php echo $endereco['cep_usuario_endereco']?>">
+	<input type="hidden" name="shippingAddressStreet" value="<?php echo $endereco['logradouro_usuario_endereco']?>">
+	<input type="hidden" name="shippingAddressNumber" value="<?php echo $endereco['numero_usuario_endereco']?>">
+	<input type="hidden" name="shippingAddressComplement" value="<?php echo $endereco['complemento_usuario_endereco']?>">
+	<input type="hidden" name="shippingAddressDistrict" value="<?php echo $endereco['bairro_usuario_endereco']?>">
+	<input type="hidden" name="shippingAddressCity" value="<?php echo $endereco['cidade_usuario_endereco']?>">
+	<input type="hidden" name="shippingAddressState" value="<?php echo $endereco['uf_usuario_endereco']?>">
+	<input type="hidden" name="shippingAddressCountry" value="<?php echo $endereco['pais_usuario_endereco']?>">
+	
+	<!-- Dados do comprador (opcionais) -->
+	<input type="hidden" name="senderName" value="<?php echo $usuario->nome_usuario?>">
+	<input type="hidden" name="senderAreaCode" value="<?php echo $usuario->ddd_usuario?>">
+	<input type="hidden" name="senderPhone" value="<?php echo $usuario->telefone_usuario?>">
+	<input type="hidden" name="senderEmail" value="<?php echo $usuario->email_usuario?>">
+	
+	<!-- submit do form (obrigatório) -->  
+	<input type="image" name="submit" src="https://p.simg.uol.com.br/out/pagseguro/i/botoes/pagamentos/120x53-pagar.gif" alt="Pague com PagSeguro">
+</form>
+
+<!-- FERERENCIA
+https://pagseguro.uol.com.br/v2/guia-de-integracao/pagamento-via-html.html#v2-item-pagamento-via-html-formulario
+-->

@@ -1,0 +1,144 @@
+<?php echo $this->doctype(); ?>
+
+<?php 
+$menu = $this->menu();
+$menu = $menu['menu'];
+
+?>
+
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <?php echo $this->headTitle('ZF2 '. $this->translate('Skeleton Application'))->setSeparator(' - ')->setAutoEscape(false) ?>
+
+        <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0') ?>
+
+        <!-- Le styles -->
+        <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'))
+                        ->prependStylesheet($this->basePath() . '/css/bootstrap-responsive.min.css')
+                        ->prependStylesheet($this->basePath() . '/css/style.css')
+                        ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css') ?>
+
+        <!-- Scripts -->
+        <?php echo $this->headScript()->prependFile($this->basePath() . '/js/html5.js', 'text/javascript', array('conditional' => 'lt IE 9',))
+                                      ->prependFile($this->basePath() . '/js/bootstrap.min.js')
+                                      ->prependFile($this->basePath() . '/js/jquery.min.js') ?>
+
+        <script>
+			$(document).ready(function() {
+				$('.autenticacao').load('/user/auth/1');
+			});
+        </script>
+    </head>
+    <body>
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </a>
+                    <a class="brand" href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Skeleton Application') ?></a>
+                    <div class="nav-collapse collapse">
+                        <ul class="nav">
+                        	<?php if (isset($menu)):?>
+                        		<?php foreach ($menu as $item1):?>
+	                        		<li class="dropdown">
+	                        			<?php if ($item1['fk_categoria'] == "0"):?>
+	                            			<a data-toggle="dropdown" class="dropdown-toggle" href="<?php echo $this->url('videos/default', array('categoria' => $item1['slug_categoria']))?>"><?php echo $item1['nome_categoria']?></a>
+                            				<?php if ($item1['child']):?>
+	                            				<ul class="dropdown-menu">
+												    <?php foreach ($menu as $item2):?>
+														<?php if ($item1['pk_categoria'] == $item2['fk_categoria']):?>
+						                            		<li><a href="<?php echo $this->url('videos/default', array('categoria' => $item1['slug_categoria'], 's1categoria' => $item2['slug_categoria']))?>"><?php echo $item2['nome_categoria']?> <?php /*if (is_array($item3)):?><i class="icon-arrow-right"></i><?php endif;*/?></a>
+								                            	<?php if ($item2['child']):?>
+									                            	<ul class="dropdown-menu sub-menu">
+																		<?php foreach ($menu as $item3):?>
+																		    <?php if ($item2['pk_categoria'] == $item3['fk_categoria']):?>
+												                            	<li><a href="<?php echo $this->url('videos/default', array('categoria' => $item1['slug_categoria'], 's1categoria' => $item2['slug_categoria'], 's2categoria' => $item3['slug_categoria']))?>"><?php echo $item3['nome_categoria']?></a></li>
+												                            <?php endif;?>
+																		<?php endforeach;?>                            				
+									                            	</ul>
+									                            <?php endif;?>
+						                            		</li>
+						                            	<?php endif;?>
+													<?php endforeach;?>                          				
+	                            			 	</ul>
+			                            	<?php endif;?>
+	                            		<?php endif;?>
+	                            	</li>
+	                            <?php endforeach;?>
+                            <?php endif;?>
+                            <li class="dropdown">
+				              <a data-toggle="dropdown" class="dropdown-toggle" href="#">Dropdown <b class="caret"></b></a>
+				              <ul class="dropdown-menu">
+				                <li>
+				                    <a href="#">2-level Dropdown <i class="icon-arrow-right"></i></a>
+				                    <ul class="dropdown-menu sub-menu">
+				                        <li><a href="#">Action</a></li>
+				                        <li><a href="#">Another action</a></li>
+				                        <li><a href="#">Something else here</a></li>
+				                        <li class="divider"></li>
+				                        <li class="nav-header">Nav header</li>
+				                        <li><a href="#">Separated link</a></li>
+				                        <li><a href="#">One more separated link</a></li>
+				                    </ul>
+				                </li>
+				                <li><a href="#">Another action</a></li>
+				                <li><a href="#">Something else here</a></li>
+				                <li class="divider"></li>
+				                <li class="nav-header">Nav header</li>
+				                <li><a href="#">Separated link</a></li>
+				                <li><a href="#">One more separated link <i class="icon-arrow-right"></i></a>
+				                	<ul class="dropdown-menu sub-menu">
+				                        <li><a href="#">Action</a></li>
+				                        <li><a href="#">Another action</a></li>
+				                    </ul>
+				                </li>
+				              </ul>
+				            </li>
+                        </ul>
+                    </div><!--/.nav-collapse -->
+                </div>
+            </div>
+        </div>
+        <div class="container">
+			<div class="row-fluid">
+				<div class="span12">
+				    <div class="span9">
+				    	<?php if(isset($messages[0])): 
+			                $class = key((array) $messages[0]);
+			                $message = current((array) $messages[0]);
+			                ?>
+			                <div class="alert alert-<?php echo $class?>">
+			                    <button type="button" class="close" data-dismiss="alert">×</button>
+			                    <?php echo $message?>
+			                </div>
+			            <?php endif; ?>
+		            	<?php echo $this->content; ?>
+				    </div>
+				    <div class="span3" style="margin-left: 5px; width: 295px;">
+				      	<div class="thumbnails bloco-lateral">
+                            <h4 class="box_arredondado box_radial_gradiente">Autenticação</h4>
+                            <div class="autenticacao"></div>
+                        </div>
+				      	<div class="thumbnails bloco-lateral">
+                            <h4 class="box_arredondado box_radial_gradiente">Anúncios de Cursos</h4>
+                            <a href="http://www.jahio.com.br/videoaulas/curso-php-volume-1-basico" target="_blank">Curso PHP Básico</a>
+                            <a href="http://www.jahio.com.br/videoaulas/curso_php_volume_2_formularios_e_listagens" target="_blank">Curso PHP Intermediário</a>
+                            <a href="http://www.jahio.com.br/videoaulas/curso-boletim-escolar-online-modulo-1" target="_blank">Curso Boletim Escolar</a>
+                            <a href="http://www.jahio.com.br/videoaulas/curso_sql_para_mysql" target="_blank">Curso de SQL / MySQL</a>
+                        </div>
+				    </div>
+		            <hr>
+		        </div>
+	        </div>
+            <footer>
+                <p>&copy; 2005 - <?php echo date('Y') ?> by Zend Technologies Ltd. <?php echo $this->translate('All rights reserved.') ?></p>
+            </footer>
+        </div> <!-- /container -->
+        <?php echo $this->inlineScript() ?>
+    </body>
+</html>
