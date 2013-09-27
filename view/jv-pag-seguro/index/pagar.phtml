@@ -1,15 +1,65 @@
 <h2>Itens</h2>
 
-<form target="pagseguro" method="post" action="https://pagseguro.uol.com.br/v2/checkout/payment.html">
-	<input type="hidden" name="receiverEmail" value="suporte@lojamodelo.com.br">  
-	<input type="hidden" name="currency" value="BRL">  
+<!--  
+Detalhes que devem ser lavados em consideração
+
+Valor do produto tem que ser inteiro
+-->
+
+<form id="form1" name="form1" method="post" target="pagseguro" action="https://pagseguro.uol.com.br/checkout/nc/checkout.jhtml">
+		<input type="hidden" name="email_cobranca" value="suporte@lojamodelo.com.br" />
+		<input type="hidden" name="cliente_nome" value="Marcelo Torres" />
+		<input type="hidden" name="cliente_end" value="Rua dos tra la las" />
+		<input type="hidden" name="cliente_num" value="80" />
+		<input type="hidden" name="cliente_compl" value="Complemento" />
+		<input type="hidden" name="cliente_cidade" value="Ilhabela" />
+		<input type="hidden" name="cliente_bairro" value="Praia Grande" />
+		<input type="hidden" name="cliente_cep" value="11630000" />
+		<input type="hidden" name="cliente_uf" value="SP" />
+		<input type="hidden" name="cliente_ddd" value="12" />
+		<input type="hidden" name="cliente_tel" value="00009999" />
+		<input type="hidden" name="cliente_email" value="cliente@gmail.com" />
+		
+		<?php foreach ($itens as $key => $item):?>
+    	<input name="item_id_<?php echo $key?>" id="item_id_<?php echo $key?>" type="hidden" value="<?php echo $item['itemId' . $key]?>">
+    	<input name="item_descr_<?php echo $key?>" id="item_descr_<?php echo $key?>" type="hidden" value="<?php echo $item['itemDescription' . $key]?>">
+    	<input name="item_quant_<?php echo $key?>" id="item_quant_<?php echo $key?>" type="hidden" value="<?php echo $item['itemQuantity' . $key]?>">
+    	<input name="item_valor_<?php echo $key?>" id="item_valor_<?php echo $key?>" type="hidden" value="<?php echo number_format($item['itemAmount' . $key], 2, '', '')?>">
+    	<input name="item_frete_<?php echo $key?>" id="item_frete_<?php echo $key?>" type="hidden" value="0" />
+    	<input name="item_peso_<?php echo $key?>" id="item_peso_<?php echo $key?>" type="hidden" value="<?php echo $item['itemWeight' . $key]?>">
+    	<?php endforeach;?>
+		
+		<input name="item_id_2" type="hidden" id="item_id_2" value="2" />
+		<input name="item_descr_2" type="hidden" id="item_descr_2" value="Descricao do Produto 2" />
+		<input name="item_quant_2" type="hidden" id="item_quant_2" value="5" />
+		<input name="item_valor_2" type="hidden" id="item_valor_2" value="1050" />
+		<input name="item_frete_2" type="hidden" id="item_frete_2" value="0" />
+		<input name="item_peso_2" type="hidden" id="item_peso_2" value="100" />
+		
+		<input name="ref_transacao" type="hidden" id="ref_transacao" value="123" />
+		<input type="hidden" name="tipo_frete" value="EN" />
+		<input type="hidden" name="cliente_pais" value="BRA" />
+		<input type="hidden" name="tipo" value="CP" />
+		<input type="hidden" name="moeda" value="BRL" />
+		<input name="button" type="submit" id="button" value="Realizar o Pagamento" />
+	</form>
+	
+<form action="http://localhost:9090/security/webpagamentos/webpagto.aspx" method="post" target="pagseguro">
+	<input type="hidden" name="email_cobranca" value="suporte@lojamodelo.com.br">  
+	<input type="hidden" value="suporte@lojamodelo.com.br" name="email_cobranca">
+	<input type="hidden" name="tipo_frete" value="EN" />
+	<input type="hidden" name="cliente_pais" value="BRA" />
+	<input type="hidden" name="tipo" value="CP" />
+	<input type="hidden" name="moeda" value="BRL" />
+								
 	    
 	<?php foreach ($itens as $key => $item):?>
-	<input type="hidden" name="itemId<?php echo $key?>" value="<?php echo $item['itemId' . $key]?>">
-	<input type="hidden" name="itemDescription<?php echo $key?>" value="<?php echo $item['itemDescription' . $key]?>">
-	<input type="hidden" name="itemAmount<?php echo $key?>" value="<?php echo $item['itemAmount' . $key]?>">
-	<input type="hidden" name="itemQuantity<?php echo $key?>" value="<?php echo $item['itemQuantity' . $key]?>">
-	<input type="hidden" name="itemWeight<?php echo $key?>" value="<?php echo $item['itemWeight' . $key]?>">
+	<input type="hidden" name="item_id_<?php echo $key?>" value="<?php echo $item['itemId' . $key]?>">
+	<input type="hidden" name="item_descr_<?php echo $key?>" value="<?php echo $item['itemDescription' . $key]?>">
+	<input type="hidden" name="item_valor_<?php echo $key?>" value="<?php echo $item['itemAmount' . $key]?>">
+	<input type="hidden" name="item_frete_<?php echo $key?>" value="0" />
+	<input type="hidden" name="item_quant_<?php echo $key?>" value="<?php echo $item['itemQuantity' . $key]?>">
+	<input type="hidden" name="item_peso_<?php echo $key?>" value="<?php echo $item['itemWeight' . $key]?>">
 	<?php endforeach;?>
 	
 	<!-- 
@@ -19,13 +69,13 @@
 	 	- www.zf2.com.br = REF# ZF2
 	 	- www.jquery2.com.br = REF# JQUERY2
 	-->  
-    <input type="hidden" name="reference" value="CVA">
+    <input name="ref_transacao" type="hidden" id="ref_transacao" value="CVA" />
 	
 	<!-- 
 		Informações de frete (opcionais)
 		 - Usar somente em caso de envio por frete transportadora ou correios. 
 	-->
-	<input type="hidden" name="shippingType" value="1">
+	<?php /*?><input type="hidden" name="shippingType" value="1">
 	<input type="hidden" name="shippingAddressPostalCode" value="<?php echo $endereco['cep_usuario_endereco']?>">
 	<input type="hidden" name="shippingAddressStreet" value="<?php echo $endereco['logradouro_usuario_endereco']?>">
 	<input type="hidden" name="shippingAddressNumber" value="<?php echo $endereco['numero_usuario_endereco']?>">
@@ -33,17 +83,118 @@
 	<input type="hidden" name="shippingAddressDistrict" value="<?php echo $endereco['bairro_usuario_endereco']?>">
 	<input type="hidden" name="shippingAddressCity" value="<?php echo $endereco['cidade_usuario_endereco']?>">
 	<input type="hidden" name="shippingAddressState" value="<?php echo $endereco['uf_usuario_endereco']?>">
-	<input type="hidden" name="shippingAddressCountry" value="<?php echo $endereco['pais_usuario_endereco']?>">
+	<input type="hidden" name="shippingAddressCountry" value="<?php echo $endereco['pais_usuario_endereco']?>">*/?>
 	
 	<!-- Dados do comprador (opcionais) -->
-	<input type="hidden" name="senderName" value="<?php echo $usuario->nome_usuario?>">
-	<input type="hidden" name="senderAreaCode" value="<?php echo $usuario->ddd_usuario?>">
-	<input type="hidden" name="senderPhone" value="<?php echo $usuario->telefone_usuario?>">
-	<input type="hidden" name="senderEmail" value="<?php echo $usuario->email_usuario?>">
+	<input type="hidden" name="cliente_nome" value="<?php echo $usuario->nome_usuario?>">
+	<input type="hidden" name="cliente_ddd" value="<?php echo $usuario->ddd_usuario?>">
+	<input type="hidden" name="cliente_tel" value="<?php echo $usuario->telefone_usuario?>">
+	<input type="hidden" name="cliente_email" value="<?php echo $usuario->email_usuario?>">
 	
 	<!-- submit do form (obrigatório) -->  
 	<input type="image" name="submit" src="https://p.simg.uol.com.br/out/pagseguro/i/botoes/pagamentos/120x53-pagar.gif" alt="Pague com PagSeguro">
 </form>
+
+<div id="products">
+		
+		<div class="product first">
+			<div class="image"><img src="https://stc.pagseguro.uol.com.br/pagseguro/i/lojamodelo/note_prata.48802.jpg" alt="Foto: Notebook Prata"></div>
+			<dl>
+				<dt>Notebook Prata</dt>
+				<dd>
+					<div class="description">AMD Turion Neo X2 Dual Core 13'' 1.6GHZ - 3GB - 320GB</div>
+					<div class="value">
+						<span>R$</span>&nbsp;<strong>24.300</strong>&nbsp;<sup>,&nbsp;00</sup>
+					</div>
+					<form action="http://localhost:9090/security/webpagamentos/webpagto.aspx" method="post" target="pagseguro">
+						<div class="pay">
+							<div>
+								<label for="item_quant1">Quantidade</label>
+								<input type="text" name="item_quant" id="item_quant1" value="01" class="textbox">
+								<input type="hidden" value="suporte@lojamodelo.com.br" name="email_cobranca">
+								<input type="hidden" value="cbr" name="tipo">
+								<input type="hidden" value="brl" name="moeda">
+								<input type="hidden" value="0001" name="item_id">
+								<input type="hidden" value="Notebook Prata" name="item_descr">
+								<input type="hidden" value="2430000" name="item_valor">
+								<input type="hidden" value="900" name="peso">
+								<input type="hidden" value="0" name="extras">
+								<input type="hidden" name="encoding" value="ISO-8859-1">
+							</div>
+							<input type="submit" name="submit_01" id="submit_01" class="btpay" value="">
+						</div>
+					</form>
+				</dd>
+			</dl>
+		</div>
+		
+		<div class="product">
+			<div class="image"><img src="https://stc.pagseguro.uol.com.br/pagseguro/i/lojamodelo/note_rosa.48802.jpg" alt="Foto: Notebook Rosa"></div>
+			<dl>
+				<dt>Notebook Rosa</dt>
+				<dd>
+					<div class="description">AMD Turion Neo X2 Dual Core 13'' 1.6GHZ - 3GB - 320GB</div>
+					<div class="value">
+						<span>R$</span>&nbsp;<strong>25.600</strong>&nbsp;<sup>,&nbsp;00</sup>
+					</div>
+					<form action="https://pagseguro.uol.com.br/checkout/nc/checkout.jhtml" method="post" target="pagseguro">
+						<div class="pay">
+							<div>
+								<label for="item_quant2">Quantidade</label>
+								<input type="text" name="item_quant" id="item_quant2" value="01" class="textbox">
+								<input type="hidden" value="suporte@lojamodelo.com.br" name="email_cobranca">
+								<input type="hidden" value="cbr" name="tipo">
+								<input type="hidden" value="brl" name="moeda">
+								<input type="hidden" value="0002" name="item_id">
+								<input type="hidden" value="Notebook Rosa" name="item_descr">
+								<input type="hidden" value="2560000" name="item_valor">
+								<input type="hidden" value="900" name="peso">
+								<input type="hidden" value="0" name="extras">
+								<input type="hidden" name="encoding" value="ISO-8859-1">
+							</div>
+							<input type="submit" name="submit_02" id="submit_02" class="btpay" value="">
+						</div>
+					</form>
+				</dd>
+			</dl>
+		</div>
+		
+		<div class="product">
+			<div class="image"><img src="https://stc.pagseguro.uol.com.br/pagseguro/i/lojamodelo/note_preto.48802.jpg" alt="Foto: Notebook Preto"></div>
+			<dl>
+				<dt>Notebook Preto</dt>
+				<dd>
+					<div class="description">AMD Turion Neo X2 Dual Core 13'' 1.6GHZ - 3GB - 320GB</div>
+					<div class="value">
+						<span>R$</span>&nbsp;<strong>26.900</strong>&nbsp;<sup>,&nbsp;00</sup>
+					</div>
+					<form action="https://pagseguro.uol.com.br/checkout/nc/checkout.jhtml" method="post" target="pagseguro">
+						<div class="pay">
+							<div>
+								<label for="item_quant3">Quantidade</label>
+								<input type="text" name="item_quant" id="item_quant3" value="01" class="textbox">
+								<input type="hidden" value="suporte@lojamodelo.com.br" name="email_cobranca">
+								<input type="hidden" value="cbr" name="tipo">
+								<input type="hidden" value="brl" name="moeda">
+								<input type="hidden" value="0003" name="item_id">
+								<input type="hidden" value="Notebook Preto" name="item_descr">
+								<input type="hidden" value="2690000" name="item_valor">
+								<input type="hidden" value="900" name="peso">
+								<input type="hidden" value="0" name="extras">
+								<input type="hidden" name="encoding" value="ISO-8859-1">
+							</div>
+							<input type="submit" name="submit_03" id="submit_03" class="btpay" value="">
+						</div>
+					</form>
+				</dd>
+			</dl>
+		</div>
+		
+		<div id="market">
+			<a href="https://pagseguro.uol.com.br" target="_blank"><img alt="Logotipos de meios de pagamento do PagSeguro" src="https://p.simg.uol.com.br/out/pagseguro/i/banners/pagamento/todos_animado_550_50.gif" title="Este site aceita pagamentos com Visa, MasterCard, Diners, American Express, Hipercard, Aura, Bradesco, Itaú, Banco do Brasil, Banrisul, saldo em conta PagSeguro e boleto."></a>
+		</div>
+		
+	</div>
 
 <!-- FERERENCIA
 https://pagseguro.uol.com.br/v2/guia-de-integracao/pagamento-via-html.html#v2-item-pagamento-via-html-formulario

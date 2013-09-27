@@ -2,15 +2,13 @@
 
 namespace JVPagSeguro\Service;
 
-use Zend\Http\Request;
-
-use Zend\Http\Client\Adapter\Curl;
-
-use Zend\Http\Client;
+use Zend\Http\Client\Adapter\Curl,
+    Zend\Http\Request,
+    Zend\Http\Client;
 
 class Retorno
 {
-	protected $token = 's4f4sd6f46sa44sdfasd8fs8df79';
+	protected $token = 'C83A6D7F719D4BCB83A0D5B5637ADBDA';
 	protected $_retPagSeguroErrNo;
 	protected $_retPagSeguroErrStr;
 	
@@ -21,8 +19,13 @@ class Retorno
 
 		// Request
 		$request = new Request();
-		$request->setUri('https://pagseguro.uol.com.br/Security/NPI/Default.aspx');
+		//$request->setUri('http://localhost:9090/pagseguro-ws/checkout/NPI.jhtml');
+		$request->setUri('https://pagseguro.uol.com.br/pagseguro-ws/checkout/NPI.jhtml');
 		$request->setMethod('POST');
+		
+		$header = new \Zend\Http\Header\ContentType();
+		$header->value = 'text/html; charset=iso-8859-1';
+		$request->getHeaders()->addHeader($header);
 		
 		// Adapter Curl
 		$adapter = new Curl();
@@ -30,6 +33,9 @@ class Retorno
 			'curloptions' => array(
 				CURLOPT_POST => 1,
 				CURLOPT_POSTFIELDS => $rpost,
+			    //CURLOPT_PROXYUSERPWD => 'usuario:senha',
+			    //CURLOPT_PROXY => 'ip:port',
+			    //CURLOPT_PORT => '3128',
 				CURLOPT_RETURNTRANSFER => 1,
 				CURLOPT_HEADER => FALSE,
 				CURLOPT_SSL_VERIFYPEER => FALSE,
@@ -49,10 +55,7 @@ class Retorno
 		
 		// String do resultado
 		$confirmResult = $response->getContent();
-		echo "<pre>";
-		exit(print_r($response));
-		echo "</pre>";
-		
+			
 		// Verifica se foi veio o status VERIFICADO caso sim seta boolean true
 		$confirm = (strcmp($response->getContent(), 'VERIFICADO') == 0);
 		
@@ -93,7 +96,7 @@ class Retorno
 			return array('confirm' => $confirm, 'post' => $post, 'produtos' => $produtos);
 		}
 		
-		return array('confirm' => $confirm, 'post' => $post, 'produtos' => array());
+		return array('status' => $confirmResult, 'confirm' => $confirm, 'post' => $post, 'produtos' => array());
 	}
 	
 	public function prepare(array $post, $confirm = true)
