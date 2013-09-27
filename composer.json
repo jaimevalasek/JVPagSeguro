@@ -6,7 +6,7 @@
     "keywords": [
         "zf2", "pagSeguro", "jaimevalasek"
     ],
-    "homepage": "https://github.com/jaimevalasek/JVPhpThumb",
+    "homepage": "https://github.com/jaimevalasek/JVPagSeguro",
     "authors": [
         {
             "name": "Jaime Marcelo Valasek",
@@ -21,7 +21,7 @@
     },    
     "autoload": {
         "psr-0": {
-            "JVPhpThumb": "src/"
+            "JVPagSeguro": "src/"
         },
         "classmap": [
             "./Module.php"
